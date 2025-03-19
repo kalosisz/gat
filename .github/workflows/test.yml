@@ -18,12 +18,23 @@ jobs:
         run: |
           echo "Hello, world!" > file.txt
           git add .
-          git commit -m "Add file.txt"
-          git push origin HEAD:my-feature-branch  # Push to a new branch
       - name: Create Pull Request
         uses: actions/github-script@v7
         with:
           script: |
+            await exec.exec('git', [
+              'config',
+              '--global',
+              'user.name',
+              `github-actions[bot]`
+            ])
+            await exec.exec('git', [
+              'config',
+              '--global',
+              'user.email',
+              `github-actions[bot]@users.noreply.github.com`
+            ])
+            await exec.exec('git', ['commit', '-m', 'Syncing QuickSight assets'])
             await github.rest.pulls.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
