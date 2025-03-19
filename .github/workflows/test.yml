@@ -36,7 +36,7 @@ jobs:
               `github-actions[bot]@users.noreply.github.com`
             ])
             await exec.exec('git', ['commit', '-m', 'Syncing QuickSight assets'])
-            await exec.exec('git', ['push', 'origin', `HEAD:my-feature-branch`])
+            await exec.exec('git', ['push', '-f', 'origin', `HEAD:my-feature-branch`])
             await github.rest.pulls.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
