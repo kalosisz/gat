@@ -1,0 +1,34 @@
+name: PR test
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write 
+
+jobs:
+  check-dist:
+    name: Check dist/
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Make changes
+        run: |
+          echo "Hello, world!" > file.txt
+          git add .
+          git commit -m "Add file.txt"
+          git push origin HEAD:my-feature-branch  # Push to a new branch
+      - name: Create Pull Request
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head: 'my-feature-branch',
+              base: 'main',
+              title: 'My Pull Request',
+              body: 'This PR adds file.txt',
+            });
